@@ -13,6 +13,5 @@ eventAllTestsEnd = { info, unitOnly, integrationOnly ->
    if( unitOnly || integrationOnly ) return
 
    // call run-fest after all other tests have run
-println includeTargets
    GSR.callPluginOrGriffonScript("RunFest")
 }
