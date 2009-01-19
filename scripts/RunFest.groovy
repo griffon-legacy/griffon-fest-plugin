@@ -22,43 +22,63 @@
  * @since 0.1
  */
 
-Ant.property(environment:"env")
-griffonHome = Ant.antProject.properties."env.GRIFFON_HOME"
+ant.property(environment:"env")
+griffonHome = ant.antProject.properties."env.GRIFFON_HOME"
 
-defaultTarget("Run FEST tests") {
-    depends(checkVersion, configureProxy, packageApp, classpath)
-    runFestImpl()
-}
-
-includeTargets << griffonScript("Package")
+includeTargets << griffonScript("_GriffonPackage")
+includeTargets << griffonScript("_GriffonClean")
+includeTargets << griffonScript("_GriffonInit")
+includeTargets << griffonScript("_GriffonBootstrap")
 
 festSourceDir = "${basedir}/test/fest"
 festTargetDir = "${projectWorkDir}/fest-classes"
 festReportDir = config.griffon.testing.reports.destDir ?: "${basedir}/test/fest-reports"
-festPluginBase = getPluginDirForName('fest').file as String
+festPluginBase = getPluginDirForName("fest").file as String
 _fest_skip = false
+_cobertura_enabled = false
 
-Ant.path( id : 'festJarSet' ) {
+ant.path( id : 'festJarSet' ) {
     fileset( dir: "${festPluginBase}/lib/test" , includes : "*.jar" )
 }
 
-Ant.taskdef( resource: "testngtasks", classpathref: "festJarSet" )
+ant.taskdef( resource: "testngtasks", classpathref: "festJarSet" )
 
-Ant.path( id: "fest.compile.classpath" ) {
-    path(refid:"griffon.classpath")
+ant.path( id: "fest.compile.classpath" ) {
+    path(refid:"griffon.compile.classpath")
+    path(refid:"griffon.runtime.classpath")
     path(refid:"festJarSet")
     pathelement(location: "${classesDirPath}")
 }
 
-Ant.path( id: "fest.runtime.classpath" ) {
+ant.path( id: "fest.runtime.classpath" ) {
     path(refid:"fest.compile.classpath")
     pathelement(location: "${festTargetDir}")
 }
 
-target(runFestImpl:"Run FEST tests") {
+target(runFest:"Run FEST tests") {
+    depends(checkVersion, configureProxy, clean, packageApp, parseArguments, classpath)
+    initCobertura()
     checkFestTestsSources()
     compileFestTests()
     runFestTests()
+    finishCobertura()
+}
+
+target(initCobertura:"") {
+   def coberturaPlugin = getPluginDirForName("code-coverage")
+   if( coberturaPlugin && argsMap.cobertura ) {
+      _cobertura_enabled = true
+       includeTargets << pluginScript("code-coverage","TestAppCobertura")
+       coberturaSetup()
+       coberturaInstrumentClasses()
+       coberturaInstrumentTests()
+   }
+}
+
+target(finishCobertura:"") {
+   if( _cobertura_enabled ) {
+      coberturaReport()
+   }
 }
 
 target(checkFestTestsSources:"") {
@@ -73,9 +93,9 @@ target(compileFestTests: "") {
     if( _fest_skip ) return
     event("CompileStart", ['fest'])
 
-    Ant.mkdir( dir: festTargetDir )
+    ant.mkdir( dir: festTargetDir )
     try {
-        Ant.groovyc( destdir: festTargetDir,
+        ant.groovyc( destdir: festTargetDir,
                      classpathref: "fest.compile.classpath",
                      encoding: "UTF-8" ) {
            src( path: "${festSourceDir}" )
@@ -94,11 +114,13 @@ target(compileFestTests: "") {
 
 target(runFestTests: "") {
     if( _fest_skip ) return
-    Ant.mkdir( dir: festReportDir )
-    Ant.testng( classpathref: "fest.runtime.classpath",
+    ant.mkdir( dir: festReportDir )
+    ant.testng( classpathref: "fest.runtime.classpath",
                 outputDir: "${festReportDir}",
                 suitename: "$baseName suite",
                 haltOnfailure: false ) {
         classfileset( dir: "${festTargetDir}", includes: "**/*Test.class" )
     }
 }
+
+setDefaultTarget(runFest)
