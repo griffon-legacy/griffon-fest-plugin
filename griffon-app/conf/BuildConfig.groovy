@@ -1,19 +1,28 @@
 griffon.project.dependency.resolution = {
-    // inherit Griffon' default dependencies
-    inherits("global") {
-    }
-    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    inherits("global") 
+    log "warn"
     repositories {
         griffonPlugins()
         griffonHome()
         griffonCentral()
 
-        mavenRepo name: 'FEST main', root: 'http://repository.codehaus.org/', m2compatible: true
+        mavenRepo 'http://repository.codehaus.org'
         mavenCentral()
     }
     dependencies {
-        compile('org.easytesting:fest-swing-junit-4.5:1.2.1') { excludes 'junit' }
-        compile 'junit:junit:4.8.2'
+        compile('org.spockframework:spock-core:0.5-groovy-1.7') {
+            exclude 'groovy-all'
+            export = false
+        }
+        build('org.easytesting:fest-swing:1.2.1') {
+            excludes 'junit'
+        }
+        build('org.easytesting:fest-swing-junit-4.5:1.2.1') {
+            excludes 'junit'
+        }
+        build('junit:junit:4.8.2') { export = false }
+        test('org.easytesting:fest-swing:1.2.1') { excludes 'junit' }
+        test('org.easytesting:fest-swing-junit:1.2.1') { excludes 'junit', 'ant-junit' }
         test('org.easytesting:fest-swing-junit-4.5:1.2.1') { excludes 'junit' }
         test 'junit:junit:4.8.2'
     }
