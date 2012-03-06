@@ -9,7 +9,7 @@ class @artifact.name@ extends FestSpec {
 
     def 'my first FEST spec'() {
         expect:
-            window
+            false // should fail by default
     }
 
     // protected void onSetup() {}

@@ -8,7 +8,7 @@ class @artifact.name@ extends FestSwingTestCase {
     //          defaults to app.windowManager.windows[0]
  
     void testSomething() {
- 
+        fail("Not implemented yet!")
     }
  
     // protected void onSetUp() {

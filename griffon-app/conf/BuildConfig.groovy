@@ -2,29 +2,28 @@ griffon.project.dependency.resolution = {
     inherits("global") 
     log "warn"
     repositories {
-        griffonPlugins()
         griffonHome()
-        griffonCentral()
-
         mavenRepo 'http://repository.codehaus.org'
         mavenCentral()
     }
     dependencies {
+        /*
         compile('org.spockframework:spock-core:0.5-groovy-1.8') {
             exclude 'groovy-all'
             export = false
         }
+        */
         build('org.easytesting:fest-swing:1.2.1') {
             excludes 'junit'
         }
         build('org.easytesting:fest-swing-junit-4.5:1.2.1') {
             excludes 'junit'
         }
-        build('junit:junit:4.8.2') { export = false }
+        // build('junit:junit:4.8.2') { export = false }
         test('org.easytesting:fest-swing:1.2.1') { excludes 'junit' }
         test('org.easytesting:fest-swing-junit:1.2.1') { excludes 'junit', 'ant-junit' }
         test('org.easytesting:fest-swing-junit-4.5:1.2.1') { excludes 'junit' }
-        test 'junit:junit:4.8.2'
+        // test 'junit:junit:4.8.2'
     }
 }
 
@@ -34,4 +33,18 @@ griffon {
         sponsorLogo = "<br/>"
         footer = "<br/><br/>Made with Griffon (@griffon.version@)"
     }
+}
+
+log4j = {
+    // Example of changing the log pattern for the default console
+    // appender:
+    appenders {
+        console name: 'stdout', layout: pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
+    }
+
+    error 'org.codehaus.griffon',
+          'org.springframework',
+          'org.apache.karaf',
+          'groovyx.net'
+    warn  'griffon'
 }
