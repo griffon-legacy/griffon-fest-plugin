@@ -56,7 +56,7 @@ abstract class FestSwingTestCase extends GriffonUnitTestCase {
 
                 def latch = new CountDownLatch(1)
                 setupConfig(app)
-                app.execSync {
+                app.execInsideUISync {
                     app.realize()
                     latch.countDown()
                 }

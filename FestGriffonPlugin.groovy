@@ -19,11 +19,11 @@
  */
 class FestGriffonPlugin {
     // the plugin version
-    String version = '0.9'
+    String version = '1.0'
     // the version or versions of Griffon the plugin is designed for
     String griffonVersion = '0.9.5 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [swing: '0.9.5', spock: '0.6']
+    Map dependsOn = [swing: '1.0.0', spock: '0.6']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
