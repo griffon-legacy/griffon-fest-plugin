@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
  */
 class FestGriffonPlugin {
     // the plugin version
-    String version = '1.0'
+    String version = '2.0.0'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5 > *'
+    String griffonVersion = '1.2.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [swing: '1.0.0', spock: '0.6']
+    Map dependsOn = [swing: '1.2.0', spock: '0.7']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
@@ -41,28 +41,31 @@ class FestGriffonPlugin {
     String source = 'https://github.com/griffon/griffon-fest-plugin'
 
     List authors = [
-            [
-                    name: 'Andres Almiray',
-                    email: 'aalmiray@yahoo.com'
-            ]
+        [
+            name: 'Andres Almiray',
+            email: 'aalmiray@yahoo.com'
+        ]
     ]
     String title = 'Enables testing with FEST'
     // accepts Markdown syntax. See http://daringfireball.net/projects/markdown/ for details
     String description = '''
-Enables UI testing with [FEST][1]. FEST-Swing is a Java library that provides a fluent interface for functional
-Swing GUI testing. This library provides an easy-to-use API that makes creation and maintenance of GUI tests easy.
-Tests created with FEST usually belong to the integration type, as they rely on testing your application from the
-end-user's point of view: the UI.
+Enables UI testing with [FEST][1]. FEST-Swing is a Java library that provides a
+fluent interface for functional Swing GUI testing. This library provides an
+easy-to-use API that makes creation and maintenance of GUI tests easy. Tests
+created with FEST usually belong to the integration type, as they rely on
+testing your application from the end-user's point of view: the UI.
 
 Usage
 -----
 
 Tests are run just like normal Griffon tests via grails `test-app`.
 
-Every FEST test must initialize the application properly and cleanup any resources after each test method has run.
-The base FEST testcase enforces this by making the following methods final: `setUp()`, `tearDown()`. However you may
-perform additional steps during those phases by overriding `onSetup()` and `onTearDown()` respectively.
-Here as a sample testcase that demonstrates FEST in action
+Every FEST test must initialize the application properly and cleanup any
+resources after each test method has run. The base FEST testcase enforces this
+by making the following methods final: `setUp()`, `tearDown()`. However you may
+perform additional steps during those phases by overriding `onSetup()` and
+`onTearDown()` respectively. Here as a sample testcase that demonstrates FEST
+in action
 
         import org.fest.swing.fixture.*
         import griffon.test.FestSwingTestCase
